@@ -1,0 +1,61 @@
+[
+    {
+        "image_name": "a.png",
+        "text": "Recepents name",
+        "correction": [
+            "Recipient's name",
+            "When",
+            "Sincerely",
+            "address",
+            "Date of Letter"
+        ]
+    },
+    {
+        "image_name": "b.png",
+        "text": "Whan",
+        "correction": [
+            "Recipient's name",
+            "When",
+            "Sincerely",
+            "address",
+            "Date of Letter"
+        ]
+    },
+    {
+        "image_name": "f.png",
+        "text": "Sincerely",
+        "correction": [
+            "Recipient's name",
+            "When",
+            "Sincerely",
+            "address",
+            "Date of Letter"
+        ]
+    },
+    {
+        "image_name": "d.png",
+        "text": "adress",
+        "correction": [
+            "Recipient's name",
+            "When",
+            "Sincerely",
+            "address",
+            "Date of Letter"
+        ]
+    },
+    {
+        "image_name": "c.png",
+        "text": "punctuation"
+    },
+    {
+        "image_name": "e.png",
+        "text": "Date of later",
+        "correction": [
+            "Recipient's name",
+            "When",
+            "Sincerely",
+            "address",
+            "Date of Letter"
+        ]
+    }
+]

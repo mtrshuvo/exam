@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+    
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial Unicode MS, Arial, "msgothic";
+}
+
+ * {
+    box-sizing: border-box;
+
+}
+
+.navbar{
+    display: flex;
+    justify-content: space-around;
+    flex-direction: row;
+    align-items: center;
+    height: 10vh;
+    width: 100%;
+}
+
+.mainsection{
+    display: flex;
+    margin-top: 50px;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+    flex-wrap: wrap;
+    margin-bottom: 100px;
+}
+
+li{
+    list-style: none;
+}
+
+.container {
+    position: relative;
+    display: block;
+    float: left;
+    width: 50%;
+    overflow: auto;
+    height: 100%;
+}
+
+.file-name {
+    width: 150px;
+    color: rgb(144, 82, 82);
+    padding-left: 10px;
+}
+</style>
+    <title>Tool</title>
+</head>
+
+<body>    
+    
+    <div class="nabbar table">
+        <div class="file-name">
+            <h3>Name: <p id="fileName"></p></h3>
+                
+        </div>
+        <div class="">
+            <span class="download">
+                <button>Download</button>
+            </span>
+            <input type="file" id="file-upload" accept="application/JSON">
+        </div>
+
+    </div>
+
+    <div class="mainsection"> </div>
+
+
+    <script>
+
+var datass
+var valuesFromInput;
+const fileUploader = (e) => {
+var target = e.target || e.srcElement;
+var file = target.files[0];
+if (file === 'undefined' || !file) {
+        return;
+    }
+fileName = target.files[0].name;
+let fileReader = new FileReader();
+    document.querySelector('#fileName').innerHTML = fileName;
+        fileReader.onload = function (e) {
+        contents = e.target.result 
+        contents = contents.replace("None", "null");
+        datass = JSON.parse(contents);
+        datass.map((data,ind)=>{      
+            var div = document.createElement('div')
+            div.className = 'input'+ind
+            rootdiv.appendChild(div)
+            
+            var h3 = document.createElement('h4')
+            h3.innerHTML =`Image No. ${ind}` 
+            div.appendChild(h3)
+
+            var img = document.createElement('img')
+            img.src = `/Phase_2_imgs/${data.image_name}`
+            img.alt = "image"
+            div.appendChild(img)
+
+            var text = document.createElement('h3')
+            text.innerHTML = data.text 
+            div.appendChild(text)
+
+            
+            var inputTypeFields = document.createElement('input')
+            inputTypeFields.type = 'text'
+            inputTypeFields.className = 'input-field'
+            inputTypeFields.id = 'input'+ind
+            div.appendChild(inputTypeFields)
+
+            var correctBtn = document.createElement('button')
+            correctBtn.className = 'buttton'
+            correctBtn.id = 'buttton'+ind
+            correctBtn.type = 'button'
+            correctBtn.innerHTML = 'Update'
+            div.appendChild(correctBtn)
+
+            if(data.correctionArrayList){
+                data.correctionArrayList.map((corectText)=>{
+                    var ul = document.createElement("ul")
+                    var li = document.createElement('li')
+                    li.innerHTML = corectText
+                    ul.appendChild(li)
+                    div.appendChild(ul)
+                })
+            }
+
+
+            var breakLine = document.createElement('br')
+            div.appendChild(breakLine)
+        }) 
+         inputlist = document.querySelectorAll(".input-field");
+         buttons = document.querySelectorAll(".buttton")
+          
+         inputlist = Array.from(inputlist);
+         buttons = Array.from(buttons)
+        
+    };
+    fileReader.readAsText(file);
+}
+var previousElement
+
+
+var  eventCallingFromoutside = (event, element, callback) =>{
+    if (element != null) {
+        if (element.addEventListener) {
+            element.addEventListener(event, callback, false);
+        } else if (element.attachEvent) {
+            element.attachEvent("on" + event, callback);
+        }
+    }
+}
+
+eventCallingFromoutside("input",document,function(e){
+    
+    if(e.target.getAttribute('class')=== 'input-field'){
+            previousElement = document.getElementById(e.target.getAttribute('id'))
+            valuesFromInput = document.getElementById(e.target.getAttribute('id')).value
+    }
+})
+var fileName
+var correctionArrayList = new Array()
+eventCallingFromoutside("click",document,function(e){
+    
+    if(e.target.getAttribute('class')==="buttton"){
+        if(valuesFromInput===undefined || valuesFromInput ==="" || valuesFromInput === null){
+            return;
+        }
+        else{
+            var button = document.getElementById(e.target.getAttribute('id')).parentElement
+       
+            var attibutes = button.getAttribute('class')
+            attibutes = attibutes.slice(-1)
+            var orderedList = document.createElement("ul")
+            var lists = document.createElement('li')
+            lists.innerHTML = valuesFromInput
+            orderedList.appendChild(lists)
+            button.append(orderedList)
+            
+            if(datass[attibutes].correctionArrayList){
+                datass[attibutes].correctionArrayList.push(valuesFromInput)
+                valuesFromInput = ""
+                correctionArrayList = []
+            }
+            else{
+                correctionArrayList.push(valuesFromInput)
+                valuesFromInput = ""
+                datass[attibutes].correctionArrayList = correctionArrayList
+            }
+            
+            datass.map((val,ind)=>{
+                document.getElementById(`input${ind}`).value = ""
+            })
+            
+
+        }
+
+    }
+})
+
+var inputlist;
+var jsonUpload = document.getElementById('file-upload')
+var rootdiv = document.querySelector('.mainsection')
+var buttons = document.querySelectorAll(".buttton")
+var downloadBtn = document.querySelector('.download')
+var inputlist = document.querySelectorAll("input-field");
+jsonUpload.addEventListener('change', fileUploader)
+downloadBtn.addEventListener('click',download)
+const downloadFile = (filename, text) => {
+    let blob = new Blob([text], {
+        type: 'text/json'
+    });
+    if (window.navigator.msSaveOrOpenBlob) {
+        window.navigator.msSaveBlob(blob, filename);
+    } else {
+        let atagelement = window.document.createElement('a');
+        atagelement.href = window.URL.createObjectURL(blob);
+        atagelement.download = filename;
+        document.body.appendChild(element);
+        atagelement.click();
+        document.body.removeChild(element);
+    }
+}
+var download =() => {
+    if(fileName===undefined){
+        return;
+    }else{
+        downloadFile(fileName.replaceAll(".json", "") + '_correctionArrayList_' + Date.now().toLocaleString()+ '.json', JSON.stringify(datass));
+    }
+    
+}
+    </script>
+</body>
+
+</html>

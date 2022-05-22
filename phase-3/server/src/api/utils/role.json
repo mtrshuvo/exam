@@ -1,0 +1,11 @@
+[
+    {
+        "name": "admin"
+    },
+    {
+        "name": "member"
+    },
+    {
+        "name": "teamlead"
+    }
+]

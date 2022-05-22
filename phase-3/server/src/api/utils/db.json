@@ -1,0 +1,8 @@
+{
+    "name": "nsladmin",
+    "nslId": "10001",
+    "role": "admin",
+    "password": "12345",
+    "isFirstTimeLogin": "false"
+
+}
